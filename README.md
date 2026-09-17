@@ -17,22 +17,36 @@ config not yet finalized.
 ## Tech stack
 
 - Python 3.11, pytest + ruff
-- LLM SDKs: `anthropic`, `openai`, `google-generativeai` (model-heterogeneous
-  agents — different roles can run on different model families)
-- `yfinance` for price/volume data, `pandas`/`numpy`/`scipy` for backtest
-  metrics and statistics, `pydantic` for structured agent output
+- Open-weight LLMs run locally via [Ollama](https://ollama.com) — different
+  agent roles run on different model families (Llama, Qwen, Mistral, Gemma,
+  DeepSeek), see `config/models.py`. No API keys, no cost.
+- `yfinance` for price/volume data, `pandas`/`numpy` for backtest metrics
 
 ## Setup
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env  # fill in API keys
+cp .env.example .env
+
+# Install Ollama (https://ollama.com), then run it and pull the models
+# assigned in config/models.py:
+ollama serve
+ollama pull llama3.1:8b   # at minimum, for the Valuation Agent
 ```
 
-`ANTHROPIC_API_KEY` is required. `OPENAI_API_KEY` / `GOOGLE_API_KEY` are only
-needed if you assign a non-Claude model to an agent role (`config/models.py`).
-`NEWS_API_KEY` is optional — without it the Sentiment Agent runs on a reduced
-feature set.
+## Run it
+
+Only the Valuation Agent is wired up end-to-end so far — real price data,
+real local model call:
+
+```bash
+python -m scripts.analyze AAPL
+python -m scripts.analyze AAPL --as-of 2026-06-01 --risk-profile risk_averse
+```
+
+Everything else (Fundamental/Sentiment/Macro/Verifier/Red Team, and the
+debate loop) is still `NotImplementedError` pending their data loaders —
+see DESIGN.md's Status section.
 
 ## Tests
 

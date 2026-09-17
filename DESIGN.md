@@ -16,7 +16,7 @@ gaps in the original paper rather than just reproducing it.
 
 | Gap in AlphaAgents | Fix in AlphaAgentsV2 |
 |---|---|
-| Single model (GPT-4o) talking to itself across all agent roles | Model-heterogeneous agents — different agent roles can run on different model families, so debate isn't one model agreeing with itself in different voices |
+| Single model (GPT-4o) talking to itself across all agent roles | Model-heterogeneous agents on **open-weight models run locally via Ollama** (Llama, Qwen, Mistral, Gemma, DeepSeek) — genuinely different model families per role, not prompt variation on one vendor's model, and free/reproducible to rerun since nothing depends on a closed API |
 | No look-ahead control — backtest window (Feb–Jun 2024) overlaps GPT-4o's training data, so "prediction" may just be memorization | Point-in-time data enforcement: agents only see filings/news dated before the decision date; backtests run on windows after the model's training cutoff; a blinded-ticker ablation checks whether recommendations lean on brand recognition instead of the actual filing |
 | 15 stocks, one sector, one 4-month bull-market window | Multi-sector universe (stratified by sector/size/style), multiple disjoint regimes (bear/sideways/bull), true market-cap benchmark instead of a self-referential subset |
 | No single-agent control — never tests whether multi-agent debate actually beats one agent with all the same data | Explicit control: one agent, all tools, no role split, no debate — multi-agent must beat this to justify its complexity |
@@ -42,13 +42,24 @@ gaps in the original paper rather than just reproducing it.
 ## Repo layout
 
 ```
-agents/       agent role implementations + base class
+agents/       agent role implementations + base class + Ollama client
 data/         point-in-time data loaders (prices, filings, news)
 debate/       orchestration, structured debate protocol, consensus logic
 backtest/     portfolio construction, Black-Litterman combination, metrics
 config/       risk profiles, universe definitions, model assignments
+scripts/      CLI entry points
 tests/
 ```
+
+## Status
+
+- **Working end-to-end:** Valuation Agent (`agents/valuation.py`) — real
+  yfinance point-in-time price data, real Ollama model call, real structured
+  output. Run it via `python -m scripts.analyze TICKER`.
+- **Stubbed (`NotImplementedError`):** Fundamental, Sentiment, Macro,
+  Verifier, Red Team, single-agent control, and the debate round-robin loop
+  — each needs its own data loader (filings, news, macro series) before it
+  can call the LLM the way Valuation now does.
 
 ## Open questions / not yet decided
 
@@ -56,4 +67,6 @@ tests/
   needs its own point-in-time discipline; vendor data would be cleaner but
   costs money)
 - News/sentiment data source and API budget
-- Which additional model families to run alongside Claude for heterogeneity
+- Local compute for the larger assigned models (e.g. `deepseek-r1:14b`,
+  `mixtral:8x7b`) — may need to downgrade to smaller quantized variants
+  depending on available RAM/VRAM
