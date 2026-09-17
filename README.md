@@ -14,11 +14,30 @@ the original paper.
 Early scaffolding — architecture and design decided, data sources and model
 config not yet finalized.
 
+## Tech stack
+
+- Python 3.11, pytest + ruff
+- LLM SDKs: `anthropic`, `openai`, `google-generativeai` (model-heterogeneous
+  agents — different roles can run on different model families)
+- `yfinance` for price/volume data, `pandas`/`numpy`/`scipy` for backtest
+  metrics and statistics, `pydantic` for structured agent output
+
 ## Setup
 
 ```bash
 pip install -r requirements.txt
 cp .env.example .env  # fill in API keys
+```
+
+`ANTHROPIC_API_KEY` is required. `OPENAI_API_KEY` / `GOOGLE_API_KEY` are only
+needed if you assign a non-Claude model to an agent role (`config/models.py`).
+`NEWS_API_KEY` is optional — without it the Sentiment Agent runs on a reduced
+feature set.
+
+## Tests
+
+```bash
+pytest
 ```
 
 ## Layout
