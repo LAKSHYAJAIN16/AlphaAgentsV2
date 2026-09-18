@@ -51,6 +51,19 @@ class AgentAnalysis:
         if not 0.0 <= self.conviction <= 10.0:
             raise ValueError(f"conviction must be in [0, 10], got {self.conviction}")
 
+    def to_dict(self) -> dict:
+        """JSON-serializable form, used by backend/api.py for the frontend."""
+        return {
+            "agent_role": self.agent_role,
+            "ticker": self.ticker,
+            "as_of": self.as_of.isoformat(),
+            "recommendation": self.recommendation.value,
+            "conviction": self.conviction,
+            "reasoning": self.reasoning,
+            "citations": [{"source": c.source, "excerpt": c.excerpt} for c in self.citations],
+            "model_tag": self.model_tag,
+        }
+
 
 class Agent(ABC):
     """Base class for a specialist analyst agent.
