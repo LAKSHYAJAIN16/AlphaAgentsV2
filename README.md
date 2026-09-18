@@ -34,6 +34,24 @@ Everything else (Fundamental, Sentiment, Macro, Verifier, Red Team, and the deba
 
 Tests: `pytest`
 
+## Desktop app
+
+A proper UI instead of the CLI — Electron + React, talking to a local FastAPI
+backend that Electron spawns and manages for you (no manual `uvicorn`
+command). Shows the full six-agent roster; agents that aren't wired up yet
+show their real backend error rather than a fake result.
+
+```bash
+pip install -r requirements.txt   # backend deps, if you haven't already
+
+cd frontend
+npm install
+npm run electron:dev
+```
+
+See [DESIGN.md](DESIGN.md#desktop-app-frontend) for the visual direction and
+architecture notes.
+
 ## Layout
 
 - `agents/` — agent role implementations + shared base class
@@ -41,3 +59,5 @@ Tests: `pytest`
 - `debate/` — multi-agent orchestration, structured debate/consensus
 - `backtest/` — portfolio construction, Black-Litterman, performance metrics
 - `config/` — risk profiles, universe definitions, per-agent model assignments
+- `backend/` — local FastAPI service for the desktop app
+- `frontend/` — Electron + React desktop app

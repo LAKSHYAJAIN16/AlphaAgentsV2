@@ -48,6 +48,8 @@ debate/       orchestration, structured debate protocol, consensus logic
 backtest/     portfolio construction, Black-Litterman combination, metrics
 config/       risk profiles, universe definitions, model assignments
 scripts/      CLI entry points
+backend/      local FastAPI service the desktop app talks to
+frontend/     Electron + React desktop app
 tests/
 ```
 
@@ -55,11 +57,41 @@ tests/
 
 - **Working end-to-end:** Valuation Agent (`agents/valuation.py`) — real
   yfinance point-in-time price data, real Ollama model call, real structured
-  output. Run it via `python -m scripts.analyze TICKER`.
+  output. Run it via `python -m scripts.analyze TICKER` (CLI) or the desktop
+  app (`frontend/`, see below).
 - **Stubbed (`NotImplementedError`):** Fundamental, Sentiment, Macro,
   Verifier, Red Team, single-agent control, and the debate round-robin loop
   — each needs its own data loader (filings, news, macro series) before it
-  can call the LLM the way Valuation now does.
+  can call the LLM the way Valuation now does. The desktop app surfaces
+  these as "not implemented" using the backend's real `NotImplementedError`
+  text, not a fake placeholder result.
+
+## Desktop app (`frontend/`)
+
+Electron + React/TypeScript, talking to `backend/api.py` (FastAPI) over
+localhost HTTP. The Electron main process (`frontend/electron/main.cjs`)
+spawns the Python backend automatically on launch and kills it on quit — the
+user never runs a Python command by hand.
+
+Visual direction: a research-terminal aesthetic (Bloomberg/EDGAR/lab-notebook
+lineage) chosen deliberately against the generic "AI SaaS dashboard" look —
+near-black ground, restrained neutral palette with one signal-amber accent
+for actions/focus, semantic green/red reserved strictly for BUY/SELL
+recommendations, IBM Plex Mono for tickers/model-tags/citations. Every agent
+card shows its real backend state (a working result, a genuine
+`NotImplementedError` message, or "debate-only" for roles that don't run
+standalone) — color is never the only signal, every state also carries a
+text pill.
+
+Run it:
+```bash
+cd frontend
+npm install
+npm run electron:dev
+```
+This starts the Vite dev server, waits for it, then launches Electron
+pointed at it (which in turn spawns the Python backend from the repo root —
+run `pip install -r requirements.txt` there first).
 
 ## Open questions / not yet decided
 
