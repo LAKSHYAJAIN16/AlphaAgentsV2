@@ -15,6 +15,8 @@ Status: early scaffolding. Architecture's locked in, data sources and model conf
 ```bash
 pip install -r requirements.txt
 cp .env.example .env
+# fill in SEC_EDGAR_USER_AGENT in .env — required for the Fundamental Agent,
+# just a descriptive contact string, no signup needed
 
 # Install Ollama (https://ollama.com), then:
 ollama serve
@@ -23,14 +25,14 @@ ollama pull llama3.1:8b   # at minimum, for the Valuation Agent
 
 ## Usage
 
-Only the Valuation Agent is wired up end to end so far:
+Valuation and Fundamental are wired up end to end so far:
 
 ```bash
 python -m scripts.analyze AAPL
-python -m scripts.analyze AAPL --as-of 2026-06-01 --risk-profile risk_averse
+python -m scripts.analyze AAPL --role fundamental --as-of 2026-06-01 --risk-profile risk_averse
 ```
 
-Everything else (Fundamental, Sentiment, Macro, Verifier, Red Team, and the debate loop) still throws `NotImplementedError` — see DESIGN.md's Status section.
+Sentiment, Macro, Verifier, Red Team, and the debate loop still throw `NotImplementedError` — see DESIGN.md's Status section.
 
 Tests: `pytest`
 

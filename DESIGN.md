@@ -55,16 +55,23 @@ tests/
 
 ## Status
 
-- **Working end-to-end:** Valuation Agent (`agents/valuation.py`) — real
-  yfinance point-in-time price data, real Ollama model call, real structured
-  output. Run it via `python -m scripts.analyze TICKER` (CLI) or the desktop
-  app (`frontend/`, see below).
-- **Stubbed (`NotImplementedError`):** Fundamental, Sentiment, Macro,
-  Verifier, Red Team, single-agent control, and the debate round-robin loop
-  — each needs its own data loader (filings, news, macro series) before it
-  can call the LLM the way Valuation now does. The desktop app surfaces
-  these as "not implemented" using the backend's real `NotImplementedError`
-  text, not a fake placeholder result.
+- **Working end-to-end:**
+  - Valuation Agent (`agents/valuation.py`) — real yfinance point-in-time
+    price data, real Ollama model call, real structured output.
+  - Fundamental Agent (`agents/fundamental.py`) — real point-in-time SEC
+    EDGAR 10-K/10-Q lookup (`data/filings.py`), real filing text (Inline
+    XBRL metadata stripped out — see that module's docstring), real Ollama
+    model call. v1 simplification: takes the filing's first ~15k characters
+    rather than section-aware retrieval; the "Financial Report RAG Tool"
+    the original paper describes is still future work.
+  - Run either via `python -m scripts.analyze TICKER --role {valuation,fundamental}`
+    (CLI) or the desktop app (`frontend/`, see below).
+- **Stubbed (`NotImplementedError`):** Sentiment, Macro, Verifier, Red Team,
+  single-agent control, and the debate round-robin loop — each needs its
+  own data loader (news, macro series) before it can call the LLM the way
+  Valuation/Fundamental now do. The desktop app surfaces these as "not
+  implemented" using the backend's real `NotImplementedError` text, not a
+  fake placeholder result.
 
 ## Desktop app (`frontend/`)
 
@@ -95,9 +102,8 @@ run `pip install -r requirements.txt` there first).
 
 ## Open questions / not yet decided
 
-- Point-in-time filings data source (SEC EDGAR full-text search is free but
-  needs its own point-in-time discipline; vendor data would be cleaner but
-  costs money)
+- Section-aware retrieval for filings (currently first-~15k-characters
+  truncation — see Fundamental Agent above)
 - News/sentiment data source and API budget
 - Local compute for the larger assigned models (e.g. `deepseek-r1:14b`,
   `mixtral:8x7b`) — may need to downgrade to smaller quantized variants
