@@ -2,7 +2,7 @@
 
 > Rebuilding BlackRock's AlphaAgents paper with an eval methodology I actually trust.
 
-I got interested in AlphaAgents — a role-based multi-agent LLM system for picking stocks — but the more I read it the more the evaluation bothered me: look-ahead contamination, no real controls, a tiny single-sector sample, and debate/bias-mitigation claims that were never actually measured. So I'm rebuilding the architecture from scratch with controls that hold up. Full rationale in [DESIGN.md](DESIGN.md).
+AlphaAgentsV2 is a from-scratch reimplementation of AlphaAgents, BlackRock's role-based multi-agent LLM system for picking stocks — rebuilt around the parts of the original evaluation that don't hold up: look-ahead contamination, no real controls, a tiny single-sector sample, and debate/bias-mitigation claims that were asserted but never measured. Full rationale in [DESIGN.md](DESIGN.md).
 
 Status: early scaffolding. Architecture's locked in, data sources and model config aren't final.
 
