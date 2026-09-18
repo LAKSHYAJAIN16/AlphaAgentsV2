@@ -8,6 +8,7 @@ service, so there's no boundary here worth protecting with one.
 
 from datetime import date
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -21,6 +22,8 @@ from agents.valuation import ValuationAgent
 from config.models import DEFAULT_AGENT_MODELS
 from config.risk_profiles import ALL_PROFILES
 
+load_dotenv()  # env vars are only read lazily inside agent calls, not at import time
+
 app = FastAPI(title="AlphaAgentsV2 backend")
 app.add_middleware(
     CORSMiddleware,
@@ -33,7 +36,7 @@ app.add_middleware(
 # documented in DESIGN.md, not something derived at runtime, so the
 # frontend never has to guess.
 ROSTER = [
-    {"role": "fundamental", "label": "Fundamental", "status": "not_implemented"},
+    {"role": "fundamental", "label": "Fundamental", "status": "ready"},
     {"role": "sentiment", "label": "Sentiment", "status": "not_implemented"},
     {"role": "valuation", "label": "Valuation", "status": "ready"},
     {"role": "macro", "label": "Macro", "status": "not_implemented"},
