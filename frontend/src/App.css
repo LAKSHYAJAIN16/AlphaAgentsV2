@@ -1,0 +1,368 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ---- title bar ---- */
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+  -webkit-app-region: drag;
+}
+
+.titlebar-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.titlebar-glyph {
+  color: var(--accent);
+}
+
+.titlebar-version {
+  color: var(--text-faint);
+  font-size: 11px;
+}
+
+.titlebar-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* ---- query bar ---- */
+
+.query-bar {
+  display: flex;
+  align-items: end;
+  gap: 20px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+  flex-wrap: wrap;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.field input,
+.field select {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  padding: 8px 10px;
+  min-width: 140px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.run-button {
+  background: var(--accent);
+  color: #16130a;
+  border: none;
+  border-radius: 4px;
+  padding: 9px 22px;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.run-button:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+
+.run-button:disabled {
+  background: var(--border-strong);
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+/* ---- roster grid ---- */
+
+.roster-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+  align-content: start;
+}
+
+.empty-note {
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* ---- agent card ---- */
+
+.agent-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 200ms ease;
+}
+
+.agent-card.state-done {
+  border-color: var(--border-strong);
+}
+
+.agent-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.agent-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-card-label {
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+.agent-card-model {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.agent-card-note {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.agent-card-note--error {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--red);
+  background: var(--red-dim);
+  border: 1px solid var(--red);
+  border-radius: 4px;
+  padding: 8px 10px;
+}
+
+/* ---- LED + pill ---- */
+
+.led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.led.tone-ready {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+}
+
+.led.tone-loading {
+  background: var(--accent);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.led.tone-buy {
+  background: var(--green);
+}
+
+.led.tone-sell {
+  background: var(--red);
+}
+
+.led.tone-hold {
+  background: var(--blue);
+}
+
+.led.tone-stub,
+.led.tone-muted {
+  background: var(--text-faint);
+}
+
+.led.tone-error {
+  background: var(--red);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.pill {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.pill.tone-ready {
+  color: var(--green);
+  border-color: var(--green-dim);
+}
+
+.pill.tone-loading {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pill.tone-buy {
+  color: var(--green);
+  background: var(--green-dim);
+  border-color: var(--green);
+}
+
+.pill.tone-sell {
+  color: var(--red);
+  background: var(--red-dim);
+  border-color: var(--red);
+}
+
+.pill.tone-hold {
+  color: var(--blue);
+  border-color: var(--blue);
+}
+
+.pill.tone-stub {
+  color: var(--text-faint);
+  border-style: dashed;
+}
+
+.pill.tone-muted {
+  color: var(--text-faint);
+}
+
+.pill.tone-error {
+  color: var(--red);
+  border-style: dashed;
+  border-color: var(--red);
+}
+
+/* ---- result body ---- */
+
+.agent-card-result {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conviction-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.conviction-label {
+  font-size: 11px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.conviction-bar {
+  flex: 1;
+  height: 5px;
+  background: var(--bg-inset);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.conviction-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.conviction-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.agent-card-reasoning {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text);
+  margin: 0;
+}
+
+.citation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.citation-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.citation-source {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--accent);
+}
+
+.citation-excerpt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+}

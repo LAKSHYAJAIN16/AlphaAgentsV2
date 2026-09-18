@@ -1,0 +1,40 @@
+{
+  "name": "alphaagentsv2-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "electron:dev": "concurrently -k -n vite,electron -c blue,yellow \"vite\" \"wait-on tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "electron:build": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^10.0.5",
+    "cross-env": "^10.1.0",
+    "electron": "^44.4.1",
+    "electron-builder": "^26.15.3",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "wait-on": "^9.1.0"
+  },
+  "build": {
+    "appId": "com.lakshyajain.alphaagentsv2",
+    "productName": "AlphaAgentsV2",
+    "directories": { "output": "release" },
+    "files": ["dist/**/*", "electron/**/*"],
+    "extraResources": [{ "from": "../", "to": "backend-src", "filter": ["backend/**", "agents/**", "config/**", "data/**", "backtest/**", "debate/**", "requirements.txt"] }]
+  }
+}
