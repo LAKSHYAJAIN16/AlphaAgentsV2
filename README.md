@@ -17,6 +17,8 @@ pip install -r requirements.txt
 cp .env.example .env
 # fill in SEC_EDGAR_USER_AGENT in .env — required for the Fundamental Agent,
 # just a descriptive contact string, no signup needed
+# fill in FINNHUB_API_KEY in .env — optional, powers the Sentiment Agent's
+# real news lookup, free signup at https://finnhub.io/register
 
 # Install Ollama (https://ollama.com), then:
 ollama serve
@@ -25,14 +27,18 @@ ollama pull llama3.1:8b   # at minimum, for the Valuation Agent
 
 ## Usage
 
-Valuation and Fundamental are wired up end to end so far:
+Valuation, Fundamental, and Sentiment are wired up end to end so far:
 
 ```bash
 python -m scripts.analyze AAPL
 python -m scripts.analyze AAPL --role fundamental --as-of 2026-06-01 --risk-profile risk_averse
+python -m scripts.analyze AAPL --role sentiment
 ```
 
-Sentiment, Macro, Verifier, Red Team, and the debate loop still throw `NotImplementedError` — see DESIGN.md's Status section.
+Sentiment needs a free `FINNHUB_API_KEY` in `.env` (see Setup) — without one
+it falls back to a reduced feature set, per `.env.example`.
+
+Macro, Verifier, Red Team, and the debate loop still throw `NotImplementedError` — see DESIGN.md's Status section.
 
 Tests: `pytest`
 

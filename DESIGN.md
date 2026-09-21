@@ -64,14 +64,21 @@ tests/
     model call. v1 simplification: takes the filing's first ~15k characters
     rather than section-aware retrieval; the "Financial Report RAG Tool"
     the original paper describes is still future work.
-  - Run either via `python -m scripts.analyze TICKER --role {valuation,fundamental}`
+  - Sentiment Agent (`agents/sentiment.py`) — real point-in-time news via
+    Finnhub's company-news endpoint (`data/news.py`, requires a free
+    `FINNHUB_API_KEY`), real Ollama model call. Thin/empty coverage is
+    handled explicitly rather than erroring: the prompt asks for low
+    conviction on sparse news, and a programmatic cap enforces it when no
+    articles are found at all, mirroring how ValuationAgent enforces its
+    volatility cap in code rather than trusting the model.
+  - Run either via `python -m scripts.analyze TICKER --role {valuation,fundamental,sentiment}`
     (CLI) or the desktop app (`frontend/`, see below).
-- **Stubbed (`NotImplementedError`):** Sentiment, Macro, Verifier, Red Team,
-  single-agent control, and the debate round-robin loop — each needs its
-  own data loader (news, macro series) before it can call the LLM the way
-  Valuation/Fundamental now do. The desktop app surfaces these as "not
-  implemented" using the backend's real `NotImplementedError` text, not a
-  fake placeholder result.
+- **Stubbed (`NotImplementedError`):** Macro, Verifier, Red Team,
+  single-agent control, and the debate round-robin loop — Macro still needs
+  a data source decision (see Open questions below); Verifier/Red Team/
+  single-agent control/debate need the rest of the roster in place first.
+  The desktop app surfaces these as "not implemented" using the backend's
+  real `NotImplementedError` text, not a fake placeholder result.
 
 ## Desktop app (`frontend/`)
 
@@ -104,7 +111,7 @@ run `pip install -r requirements.txt` there first).
 
 - Section-aware retrieval for filings (currently first-~15k-characters
   truncation — see Fundamental Agent above)
-- News/sentiment data source and API budget
+- Macro data source (rates, sector ETF flows) — not yet selected
 - Local compute for the larger assigned models (e.g. `deepseek-r1:14b`,
   `mixtral:8x7b`) — may need to downgrade to smaller quantized variants
   depending on available RAM/VRAM
