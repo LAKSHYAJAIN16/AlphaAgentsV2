@@ -37,7 +37,7 @@ app.add_middleware(
 # frontend never has to guess.
 ROSTER = [
     {"role": "fundamental", "label": "Fundamental", "status": "ready"},
-    {"role": "sentiment", "label": "Sentiment", "status": "not_implemented"},
+    {"role": "sentiment", "label": "Sentiment", "status": "ready"},
     {"role": "valuation", "label": "Valuation", "status": "ready"},
     {"role": "macro", "label": "Macro", "status": "not_implemented"},
     {"role": "verifier", "label": "Verifier", "status": "debate_only"},

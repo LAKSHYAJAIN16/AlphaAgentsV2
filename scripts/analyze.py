@@ -1,7 +1,7 @@
 """CLI: run a single agent's analysis against a real ticker.
 
-Valuation and Fundamental are wired up end-to-end so far. Sentiment/Macro
-still raise NotImplementedError pending their data loaders — see DESIGN.md.
+Valuation, Fundamental, and Sentiment are wired up end-to-end so far. Macro
+still raises NotImplementedError pending its data loader — see DESIGN.md.
 
 Usage:
     python -m scripts.analyze AAPL
